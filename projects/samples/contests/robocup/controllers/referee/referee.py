@@ -827,7 +827,7 @@ def check_team_kickoff_position(team):
         if 'penalized' in player:
             continue  # skip penalized players
         if not player['inside_field']:
-            send_penalty(player, 'INCAPABLE', 'outside of field at kick-off')
+            send_penalty(player, 'INCAPABLE', 'outside the field at kick-off')
             penalty = True
         elif not player['inside_own_side']:
             send_penalty(player, 'INCAPABLE', 'outside team side at kick-off')

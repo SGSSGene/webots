@@ -17,8 +17,8 @@ class Field:
     def point_inside(self, point, include_turf=False):
         if point[2] > self.turf_depth:  # in the air
             return False
-        x = self.size_x + self.border_strip_width if include_turf else 0
-        y = self.size_y + self.border_strip_width if include_turf else 0
+        x = self.size_x + (self.border_strip_width if include_turf else 0)
+        y = self.size_y + (self.border_strip_width if include_turf else 0)
         if point[0] > x or point[0] < -x or point[1] > y or point[1] < -y:
             return False
         return True
