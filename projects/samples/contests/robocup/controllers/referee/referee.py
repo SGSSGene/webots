@@ -1491,10 +1491,10 @@ while supervisor.step(time_step) != -1:
                 else:
                     error(f'Unsupported game type: {game.type}.')
         if game.interruption_countdown == 0 and game.ready_countdown == 0 and \
-            (game.ball_position[1] - game.ball_radius > game.field.size_y or
-             game.ball_position[1] + game.ball_radius < -game.field.size_y or
-             game.ball_position[0] - game.ball_radius > game.field.size_x or
-             game.ball_position[0] + game.ball_radius < -game.field.size_x):
+            (game.ball_position[1] - game.ball_radius >= game.field.size_y or
+             game.ball_position[1] + game.ball_radius <= -game.field.size_y or
+             game.ball_position[0] - game.ball_radius >= game.field.size_x or
+             game.ball_position[0] + game.ball_radius <= -game.field.size_x):
             info(f'Ball left the field at ({game.ball_position[0]} {game.ball_position[1]} {game.ball_position[2]}) after '
                  f'being touched by {game.ball_last_touch_team} player {game.ball_last_touch_player_number}.')
             game.ball_exit_translation = game.ball_position
