@@ -415,27 +415,27 @@ public:
         else
           switch (device->getNodeType()) {
             case webots::Node::ACCELEROMETER: {
-              webots::Accelerometer *accelerometer = (webots::Accelerometer *)device;
+              webots::Accelerometer *accelerometer = dynamic_cast<webots::Accelerometer *>(device);
               accelerometer->enable(sensor_time_step);
               break;
             }
             case webots::Node::CAMERA: {
-              webots::Camera *camera = (webots::Camera *)device;
+              webots::Camera *camera = dynamic_cast<webots::Camera *>(device);
               camera->enable(sensor_time_step);
               break;
             }
             case webots::Node::GYRO: {
-              webots::Gyro *gyro = (webots::Gyro *)device;
+              webots::Gyro *gyro = dynamic_cast<webots::Gyro *>(device);
               gyro->enable(sensor_time_step);
               break;
             }
             case webots::Node::POSITION_SENSOR: {
-              webots::PositionSensor *positionSensor = (webots::PositionSensor *)device;
+              webots::PositionSensor *positionSensor = dynamic_cast<webots::PositionSensor *>(device);
               positionSensor->enable(sensor_time_step);
               break;
             }
             case webots::Node::TOUCH_SENSOR: {
-              webots::TouchSensor *touchSensor = (webots::TouchSensor *)device;
+              webots::TouchSensor *touchSensor = dynamic_cast<webots::TouchSensor *>(device);
               touchSensor->enable(sensor_time_step);
               break;
             }
