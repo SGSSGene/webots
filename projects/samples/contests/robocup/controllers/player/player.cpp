@@ -577,12 +577,12 @@ public:
 
   void sendSensorMessage() {
     const uint32_t size = sensor_measurements.ByteSizeLong();
-    if (bandwidth_usage(size) > TEAM_QUOTA) {
-      sensor_measurements.Clear();
-      Message *message = sensor_measurements.add_messages();
-      message->set_message_type(Message::ERROR_MESSAGE);
-      message->set_text(std::to_string(TEAM_QUOTA) + " MB/s quota exceeded.");
-    }
+    // if (bandwidth_usage(size) > TEAM_QUOTA) {
+    //   sensor_measurements.Clear();
+    //   Message *message = sensor_measurements.add_messages();
+    //   message->set_message_type(Message::ERROR_MESSAGE);
+    //   message->set_text(std::to_string(TEAM_QUOTA) + " MB/s quota exceeded.");
+    // }
     char *output = new char[sizeof(uint32_t) + size];
     uint32_t *output_size = (uint32_t *)output;
     *output_size = htonl(size);
