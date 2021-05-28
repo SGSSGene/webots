@@ -44,13 +44,15 @@ void usleep(__int64 usec) {
 #define ByteSizeLong ByteSize
 #endif
 
-// #define JPEG_COMPRESSION 1  // uncomment this to test JPEG compression
+#define JPEG_COMPRESSION 1  // uncomment this to test JPEG compression
 
-// #define TURBOJPEG 1
+#define TURBOJPEG 1
 // It turns out that the libjpeg interface to turbojpeg runs faster than the native turbojpeg interface
 // Alternatives to be considered: NVIDIA CUDA nvJPEG Encoder, Intel IPP JPEG encoder
 #ifdef TURBOJPEG
 #include <turbojpeg.h>
+#define TRUE true
+#define FALSE false
 #else
 #include <jpeglib.h>
 #endif
@@ -200,7 +202,7 @@ static void encode_jpeg(const unsigned char *image, int width, int height, int q
                         unsigned char **buffer) {
 #ifdef TURBOJPEG
   tjhandle compressor = tjInitCompress();
-  tjCompress2(compressor, image, width, 0, height, TJPF_RGB, buffer, size, TJSAMP_444, quality, TJFLAG_FASTDCT);
+  tjCompress2(compressor, image, width, 0, height, TJPF_RGB, buffer, size, TJSAMP_422, quality, TJFLAG_FASTDCT);
   tjDestroy(compressor);
 #else
   struct jpeg_compress_struct cinfo;
@@ -557,7 +559,7 @@ public:
         measurement->set_name(camera->getName());
         measurement->set_width(width);
         measurement->set_height(height);
-        measurement->set_quality(-1);  // raw image (JPEG compression not yet supported)
+//        measurement->set_quality(-1);  // raw image (JPEG compression not yet supported)
         const unsigned char *rgba_image = camera->getImage();
         const int rgb_image_size = width * height * 3;
         unsigned char *rgb_image = new unsigned char[rgb_image_size];
@@ -566,17 +568,23 @@ public:
           rgb_image[3 * i + 1] = rgba_image[4 * i + 1];
           rgb_image[3 * i + 2] = rgba_image[4 * i + 2];
         }
-        measurement->set_image(rgb_image, rgb_image_size);
-        delete[] rgb_image;
 
 #ifdef JPEG_COMPRESSION
         // testing JPEG compression (impacts the performance)
         unsigned char *buffer = NULL;
         long unsigned int bufferSize = 0;
-        encode_jpeg(rgba_image, width, height, 95, &bufferSize, &buffer);
+        encode_jpeg(rgb_image, width, height, 95, &bufferSize, &buffer);
+
+        measurement->set_quality(95);
+        measurement->set_image(buffer, bufferSize);
         free_jpeg(buffer);
         buffer = NULL;
+#else
+        measurement->set_image(rgb_image, rgb_image_size);
 #endif
+        delete[] rgb_image;
+
+
 
         continue;
       }
