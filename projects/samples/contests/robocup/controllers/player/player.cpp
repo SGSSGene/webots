@@ -560,13 +560,13 @@ public:
         measurement->set_width(width);
         measurement->set_height(height);
 //        measurement->set_quality(-1);  // raw image (JPEG compression not yet supported)
-        const unsigned char *rgba_image = camera->getImage();
+        const unsigned char *bgra_image = camera->getImage();
         const int rgb_image_size = width * height * 3;
         unsigned char *rgb_image = new unsigned char[rgb_image_size];
         for (int i = 0; i < width * height; i++) {
-          rgb_image[3 * i] = rgba_image[4 * i];
-          rgb_image[3 * i + 1] = rgba_image[4 * i + 1];
-          rgb_image[3 * i + 2] = rgba_image[4 * i + 2];
+          rgb_image[3 * i] = bgra_image[4 * i + 2];
+          rgb_image[3 * i + 1] = bgra_image[4 * i + 1];
+          rgb_image[3 * i + 2] = bgra_image[4 * i + 0];
         }
 
 #ifdef JPEG_COMPRESSION
