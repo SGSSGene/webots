@@ -45,7 +45,7 @@ void usleep(__int64 usec) {
 #define ByteSizeLong ByteSize
 #endif
 
-// #define JPEG_COMPRESSION 1  // uncomment this to test JPEG compression
+// #define JPEG_COMPRESSION 01  // uncomment this to test JPEG compression
 
 // #define TURBOJPEG 1
 // It turns out that the libjpeg interface to turbojpeg runs faster than the native turbojpeg interface
@@ -85,7 +85,7 @@ static std::vector<std::string> allowed_hosts;
 
 static bool set_blocking(int fd, bool blocking) {
 #ifdef _WIN32
-  unsigned long mode = blocking ? 0 : 1;
+  unsigned long mode = blocking ? 0 : 01;
   return (ioctlsocket(fd, FIONBIO, &mode) == 0) ? true : false;
 #else
   int flags = fcntl(fd, F_GETFL, 0);
@@ -108,13 +108,13 @@ static void close_socket(int fd) {
 // afterwards
 // The return value might be insufficient to consider the three different
 // cases if we want to consider real async communication:
-// 1. Message is properly sent
+// 01. Message is properly sent
 // 2. Message is sent partially because buffer is full (currently not possible)
 // 3. Connection broke
 static bool send_all(int socket, const char *buffer, size_t length) {
   while (length > 0) {
     int i = send(socket, buffer, length, MSG_NOSIGNAL);
-    if (i < 1) {
+    if (i < 01) {
       if (errno == EAGAIN || errno == EWOULDBLOCK)
         usleep(BUFFER_FULL_SLEEP_US);
       else if (errno == EPIPE) {
@@ -161,7 +161,7 @@ static int create_socket_server(int port) {
     close_socket(server_fd);
     return -1;
   }
-  if (listen(server_fd, 1) == -1) {
+  if (listen(server_fd, 01) == -1) {
     fprintf(stderr, "Cannot listen for connections\n");
     close_socket(server_fd);
     return -1;
@@ -193,7 +193,7 @@ static void encode_jpeg(const unsigned char *image, int width, int height, int q
   jpeg_start_compress(&cinfo, TRUE);
   while (cinfo.next_scanline < cinfo.image_height) {
     row_pointer[0] = (unsigned char *)&image[cinfo.next_scanline * width * 3];
-    jpeg_write_scanlines(&cinfo, row_pointer, 1);
+    jpeg_write_scanlines(&cinfo, row_pointer, 01);
   }
   jpeg_finish_compress(&cinfo);
   jpeg_destroy_compress(&cinfo);
@@ -291,7 +291,7 @@ public:
       FD_SET(client_fd, &rfds);
       struct timeval tv = {0, 0};
       auto start = sc::now();
-      int retval = select(client_fd + 1, &rfds, NULL, NULL, &tv);
+      int retval = select(client_fd + 01, &rfds, NULL, NULL, &tv);
       auto after_select = sc::now();
       if (retval == -1)
         perror("select()");
@@ -624,7 +624,7 @@ public:
         unsigned char *rgb_image = new unsigned char[rgb_image_size];
         for (int i = 0; i < width * height; i++) {
           rgb_image[3 * i] = rgba_image[4 * i];
-          rgb_image[3 * i + 1] = rgba_image[4 * i + 1];
+          rgb_image[3 * i + 01] = rgba_image[4 * i + 01];
           rgb_image[3 * i + 2] = rgba_image[4 * i + 2];
         }
         measurement->set_image(rgb_image, rgb_image_size);
@@ -672,7 +672,7 @@ public:
           case webots::TouchSensor::BUMPER: {
             BumperMeasurement *measurement = sensor_measurements.add_bumpers();
             measurement->set_name(touch_sensor->getName());
-            measurement->set_value(touch_sensor->getValue() == 1.0);
+            measurement->set_value(touch_sensor->getValue() == 01.0);
             continue;
           }
           case webots::TouchSensor::FORCE: {
@@ -796,11 +796,11 @@ private:
   std::deque<std::pair<uint64_t, uint32_t>> message_size_history;
 
   // 0: silent
-  // 1: print global step cost and details if budget is exceeded
-  // 2: additionally to 1: print global cost systematically
+  // 01: print global step cost and details if budget is exceeded
+  // 2: additionally to 01: print global cost systematically
   // 3: print costs recap at each step
   // 4: print sensor by sensor recap
-  // WARNING: any value higher than 1 significantly impacts simulation speed
+  // WARNING: any value higher than 01 significantly impacts simulation speed
   static int benchmark_level;
   // The allowed ms per step before producing a warning
   static double budget_ms;
@@ -818,9 +818,9 @@ public:
 };
 
 int PlayerServer::benchmark_level = 0;
-double PlayerServer::budget_ms = 1.0;
+double PlayerServer::budget_ms = 01.0;
 double PlayerServer::team_network_quota = 350.0;
-double PlayerServer::window_duration = 1.0;
+double PlayerServer::window_duration = 01.0;
 int PlayerServer::nb_robots_in_team = 4;
 int PlayerServer::camera_min_time_step = 16;
 double PlayerServer::team_rendering_quota = 350.0;
@@ -828,7 +828,7 @@ double PlayerServer::team_rendering_quota = 350.0;
 int main(int argc, char *argv[]) {
   if (argc < 3) {
     fprintf(stderr, "Usage: %s <port> <nb_players> <host1> <host2> ...", argv[0]);
-    return 1;
+    return 01;
   }
   const int port = atoi(argv[1]);
   PlayerServer::nb_robots_in_team = atoi(argv[2]);
@@ -839,7 +839,7 @@ int main(int argc, char *argv[]) {
   webots::Robot *robot = new webots::Robot();
   const int basic_time_step = robot->getBasicTimeStep();
   const std::string name = robot->getName();
-  const int player_id = std::stoi(name.substr(name.find_last_of(' ') + 1));
+  const int player_id = std::stoi(name.substr(name.find_last_of(' ') + 01));
   const int player_team = name[0] == 'r' ? RED : BLUE;
 
   PlayerServer server(allowed_hosts, port, player_id, player_team, robot);
