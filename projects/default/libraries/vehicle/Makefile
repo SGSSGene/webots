@@ -17,9 +17,9 @@ space := $(null) $(null)
 WEBOTS_HOME_PATH=$(subst $(space),\ ,$(strip $(subst \,/,$(WEBOTS_HOME))))
 include $(WEBOTS_HOME_PATH)/resources/Makefile.os.include
 
-.PHONY: release debug profile clean c/car c/driver cpp/car cpp/driver python java
+.PHONY: release debug profile clean c/car c/driver cpp/car cpp/driver python
 
-release debug profile clean: java python
+release debug profile clean: python
 
 java: cpp/driver cpp/car
 	+@echo "# make" $(MAKECMDGOALS) $@

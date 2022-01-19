@@ -28,7 +28,7 @@ release debug profile clean:
 	@echo "#"
 	@echo "# Java controller library ("$@")"
 	@echo "#"
-	@+make -s -C java $@
+#	@+make -s -C java $@
 	@echo "# Matlab controller library ("$@")"
 	@echo "#"
 	@+make -s -C matlab $@

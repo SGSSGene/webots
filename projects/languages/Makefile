@@ -17,5 +17,5 @@
 release debug profile clean:
 	@echo "#" ; echo "# *** controllers ***"
 	+make -s -C cpp/controllers $@
-	+make -s -C java/controllers $@
+#	+make -s -C java/controllers $@
 	+make -s -C matlab/controllers $@
