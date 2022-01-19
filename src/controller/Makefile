@@ -49,6 +49,10 @@ ifeq ($(OSTYPE),linux)
 	@echo "# Python 3.9 controller library ("$@")"
 	@echo "#"
 	@+PYTHON_COMMAND=python3.9 make -s -C python $@
+	@echo "#"
+	@echo "# Python 3.10 controller library ("$@")"
+	@echo "#"
+	@+PYTHON_COMMAND=python3.10 make -s -C python $@
 endif
 ifeq ($(OSTYPE),windows)
 	@echo "#"
@@ -89,6 +93,10 @@ ifeq ($(OSTYPE),darwin)
 	@echo "# Python 3.9 controller library ("$@")"
 	@echo "#"
 	@+PYTHON_COMMAND=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3.9 make -s -C python $@
+	@echo "#"
+	@echo "# Python 3.10 controller library ("$@")"
+	@echo "#"
+	@+PYTHON_COMMAND=/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10 make -s -C python $@
 	@echo "#"
 	@echo "# Python 3.7 (brew) controller library ("$@")"
 	@echo "#"
