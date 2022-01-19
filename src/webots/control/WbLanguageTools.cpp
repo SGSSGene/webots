@@ -72,7 +72,7 @@ QString WbLanguageTools::pythonCommand(QString &shortVersion, const QString &com
 #else
     QObject::tr("Webots requires Python version 3.9, 3.8"
 #ifdef __linux__
-                ", 3.7 or 3.6"  // we also support 3.6 on ubuntu 18.04
+                ", 3.7, 3.6 or 3.10"  // we also support 3.6 on ubuntu 18.04
 #else
                 " or 3.7"
 #endif
@@ -95,7 +95,7 @@ QString WbLanguageTools::pythonCommand(QString &shortVersion, const QString &com
   const QString output = process.readAll();
   // "3.6.3 (v3.6.3:2c5fed8, Oct  3 2017, 18:11:49) [MSC v.1900 64 bit (AMD64)]\nTrue\n" or the like
   const QStringList version = output.split("\n");
-  if (!version[0].startsWith("3.9.") && !version[0].startsWith("3.8.") && !version[0].startsWith("3.7.")) {
+  if (!version[0].startsWith("3.10.") && !version[0].startsWith("3.9.") && !version[0].startsWith("3.8.") && !version[0].startsWith("3.7.")) {
     WbLog::warning(QObject::tr("\"%1\" was not found.\n").arg(pythonCommand) + advice);
     pythonCommand = "!";
   } else if (version.size() > 1 && version[1].startsWith("False")) {
@@ -127,6 +127,9 @@ QString WbLanguageTools::pythonCommand(QString &shortVersion, const QString &com
     } else if (pythonCommand == "python3.9") {
       pythonCommand = findWorkingPythonPath("3.9", env, true);
       shortVersion = "39";
+    } else if (pythonCommand == "python3.10") {
+      pythonCommand = findWorkingPythonPath("3.10", env, true);
+      shortVersion = "310";
     } else
       shortVersion = checkIfPythonCommandExist(pythonCommand, env, true);
   }
@@ -161,8 +164,10 @@ const QString WbLanguageTools::checkIfPythonCommandExist(const QString &pythonCo
     if (log)
       WbLog::warning(QObject::tr("\"%1\" was not found.\n").arg(pythonCommand));
     shortVersion = QString();
-  } else
-    shortVersion = QString(version[0][0]) + version[0][2];
+  } else {
+    const QStringList version_parts = output.split(".");
+    shortVersion = version_parts[0] + version_parts[1];
+  }
   return shortVersion;
 }
 #endif

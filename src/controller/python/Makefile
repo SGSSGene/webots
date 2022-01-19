@@ -30,7 +30,7 @@ default:
 include $(WEBOTS_HOME_PATH)/resources/Makefile.os.include
 
 PYTHON_COMMAND ?= python
-PYTHON_VERSION := $(shell $(PYTHON_COMMAND) --version 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1.\2/')
+PYTHON_VERSION := $(shell $(PYTHON_COMMAND) --version 2>&1 | sed 's/.* \([0-9]*\)\.\([0-9]*\).*/\1.\2/')
 PYTHON_SHORT_VERSION = $(subst .,,$(PYTHON_VERSION))
 PYTHON_FULL_VERSION := $(subst Python ,,$(shell $(PYTHON_COMMAND) --version 2>&1))
 INTERFACE       = controller.i
@@ -61,7 +61,7 @@ endif
 
 ifeq ($(OSTYPE),darwin)
 PYTHON_PATH = $(shell $(PYTHON_COMMAND) -u -c "import sys; print(sys.exec_prefix)")
-SKIP_PYTHON_PYMALLOC := 38 39
+SKIP_PYTHON_PYMALLOC := 38 39 310
 ifeq ($(filter $(PYTHON_SHORT_VERSION),$(SKIP_PYTHON_PYMALLOC)),)
 PYTHON_PYMALLOC = m
 endif
@@ -73,6 +73,9 @@ C_FLAGS          += -Wno-deprecated-declarations
 endif
 endif
 ifeq ($(PYTHON_SHORT_VERSION),39)
+C_FLAGS          += -Wno-deprecated-declarations
+endif
+ifeq ($(PYTHON_SHORT_VERSION),310)
 C_FLAGS          += -Wno-deprecated-declarations
 endif
 ifeq ($(findstring llvm-g++,$(shell ls -lF $(shell which c++ 2> /dev/null))),)
@@ -89,6 +92,9 @@ endif
 ifeq ($(OSTYPE),linux)
 C_FLAGS         = -c -Wall -fPIC -Wno-unused-but-set-variable -Wno-maybe-uninitialized
 ifeq ($(PYTHON_SHORT_VERSION),39)
+C_FLAGS          += -Wno-deprecated-declarations
+endif
+ifeq ($(PYTHON_SHORT_VERSION),310)
 C_FLAGS          += -Wno-deprecated-declarations
 endif
 LD_FLAGS        = -shared -Wl,-rpath,'$$ORIGIN'/../
