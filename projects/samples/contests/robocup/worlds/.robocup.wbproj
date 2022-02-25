@@ -6,7 +6,6 @@ maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: -1
-consoles: Console:All:All
 renderingDevicePerspectives: blue player 1:Camera;1;1;0;0
 renderingDevicePerspectives: blue player 2:Camera;1;1;0;0
 renderingDevicePerspectives: blue player 3:Camera;1;1;0;0
